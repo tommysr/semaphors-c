@@ -14,11 +14,12 @@ void sem_set_default(int id);
 
 int main(int argc, char *argv[])
 {
-  key_t key = 2137;
+  key_t key = 2115;
   int sem_count = 5;
-  int status, proc_res;
-  char path[] = "./";
+  int status, child_pid;
+
   char str[10];
+  char path[] = "./";
   char *programs[] = {"p1", "p2", "p3"};
 
   int sem_id = sem_create(key, sem_count);
@@ -30,14 +31,15 @@ int main(int argc, char *argv[])
     switch (fork())
     {
     case -1:
-      perror("fork error\n");
+      perror("creating child process error\n");
       exit(EXIT_FAILURE);
       break;
     case 0:
-      proc_res = execl(strcat(path, programs[i]), programs[i], str, NULL);
-      if (proc_res == -1)
+      child_pid = execl(strcat(path, programs[i]), programs[i], str, NULL);
+
+      if (child_pid == -1)
       {
-        perror("exec error");
+        perror("exec child program error");
         exit(EXIT_FAILURE);
       }
       break;
@@ -52,11 +54,11 @@ int main(int argc, char *argv[])
 
     if (child_pid == -1)
     {
-      perror("wait error\n");
+      perror("wait for child error\n");
       exit(EXIT_FAILURE);
     }
 
-    printf("Proces potomny %d‚ status %d\n", child_pid, status);
+    printf("Proces o PID: %d zakonczony z statusem %d\n", child_pid, status);
   }
 
   sem_remove(sem_id);

@@ -13,39 +13,45 @@ static void semafor_v(int);
 int main(int argc, char *argv[])
 {
   FILE *fp = NULL;
-  fp = fopen("wynik.txt", "a");
+  char buff[50];
+  fp = fopen("wynik.txt", "w");
+
   if (fp == NULL)
   {
-    perror("fopen");
+    perror("file open error");
     exit(EXIT_FAILURE);
   }
 
   sem_id = atoi(argv[1]);
 
-  printf("task t21 PID: %d \n", getpid());
-  fprintf(fp, "task t21 PID: %d \n", getpid());
+  sprintf(buff, "Sekcja t21 procesu o PID: %d \n", getpid());
+  printf(buff);
+  fprintf(fp, buff);
   fflush(fp);
   sleep(1);
 
   semafor_v(0);
   semafor_p(1);
 
-  printf("task t22 PID: %d \n", getpid());
-  fprintf(fp, "task t22 PID: %d \n", getpid());
+  sprintf(buff, "Sekcja t22 procesu o PID: %d \n", getpid());
+  printf(buff);
+  fprintf(fp, buff);
   fflush(fp);
   sleep(1);
 
   semafor_v(2);
   semafor_p(3);
 
-  printf("task t23 PID: %d \n", getpid());
-  fprintf(fp, "task t23 PID: %d \n", getpid());
+  sprintf(buff, "Sekcja t23 procesu o PID: %d \n", getpid());
+  printf(buff);
+  fprintf(fp, buff);
   fflush(fp);
   sleep(1);
 
   semafor_v(4);
 
   fclose(fp);
+  return 0;
 }
 static void semafor_p(int i)
 {

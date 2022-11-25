@@ -13,10 +13,12 @@ static void semafor_v(int);
 int main(int argc, char *argv[])
 {
   FILE *fp = NULL;
-  fp = fopen("wynik.txt", "a");
+  char buff[50];
+  fp = fopen("wynik.txt", "w");
+
   if (fp == NULL)
   {
-    perror("fopen");
+    perror("file open error");
     exit(EXIT_FAILURE);
   }
 
@@ -24,25 +26,31 @@ int main(int argc, char *argv[])
 
   semafor_p(0);
 
-  printf("task t31 PID: %d \n", getpid());
-  fprintf(fp, "task t31 PID: %d \n", getpid());
+  sprintf(buff, "Sekcja t31 procesu o PID: %d \n", getpid());
+  printf(buff);
+  fprintf(fp, buff);
   fflush(fp);
   sleep(1);
-  printf("task t32 PID: %d \n", getpid());
-  fprintf(fp, "task t32 PID: %d \n", getpid());
+
+  sprintf(buff, "Sekcja t32 procesu o PID: %d \n", getpid());
+  printf(buff);
+  fprintf(fp, buff);
   fflush(fp);
   sleep(1);
 
   semafor_v(1);
   semafor_p(4);
 
-  printf("task t33 PID: %d \n", getpid());
-  fprintf(fp, "task t33 PID: %d \n", getpid());
+  sprintf(buff, "Sekcja t33 procesu o PID: %d \n", getpid());
+  printf(buff);
+  fprintf(fp, buff);
   fflush(fp);
   sleep(1);
 
   fclose(fp);
+  return 0;
 }
+
 static void semafor_p(int i)
 {
   struct sembuf bufor_sem;

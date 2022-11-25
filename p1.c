@@ -14,10 +14,12 @@ static void semafor_v(int);
 int main(int argc, char *argv[])
 {
   FILE *fp = NULL;
-  fp = fopen("wynik.txt", "a");
+  char buff[50];
+  fp = fopen("wynik.txt", "w");
+
   if (fp == NULL)
   {
-    perror("fopen");
+    perror("file open error");
     exit(EXIT_FAILURE);
   }
 
@@ -25,12 +27,15 @@ int main(int argc, char *argv[])
 
   semafor_p(2);
 
-  printf("task t11 PID: %d \n", getpid());
-  fprintf(fp, "task t11 PID: %d \n", getpid());
+  sprintf(buff, "Sekcja t11 procesu o PID: %d \n", getpid());
+  printf(buff);
+  fprintf(fp, buff);
   fflush(fp);
   sleep(1);
-  printf("task t12 PID: %d \n", getpid());
-  fprintf(fp, "task t12 PID: %d \n", getpid());
+
+  sprintf(buff, "Sekcja t12 procesu o PID: %d \n", getpid());
+  printf(buff);
+  fprintf(fp, buff);
   fflush(fp);
   sleep(1);
 
