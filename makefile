@@ -1,3 +1,5 @@
+default: all
+
 all: p1 p2 p3 main
 
 p1: ./src/p1.c
@@ -11,3 +13,6 @@ p3: ./src/p3.c
 
 main: ./src/main.c
 	gcc -o main ./src/main.c
+
+clean:
+	rm -f main p1 p2 p3
