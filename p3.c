@@ -13,7 +13,6 @@ static void semafor_v(int);
 int main(int argc, char *argv[])
 {
   FILE *fp = NULL;
-  char buff[50];
   fp = fopen("wynik.txt", "w");
 
   if (fp == NULL)
@@ -26,24 +25,21 @@ int main(int argc, char *argv[])
 
   semafor_p(0);
 
-  sprintf(buff, "Sekcja t31 procesu o PID: %d \n", getpid());
-  printf(buff);
-  fprintf(fp, buff);
+  printf("Sekcja t31 procesu o PID: %d \n", getpid());
+  fprintf(fp, "Sekcja t31 procesu o PID: %d \n", getpid());
   fflush(fp);
   sleep(1);
 
-  sprintf(buff, "Sekcja t32 procesu o PID: %d \n", getpid());
-  printf(buff);
-  fprintf(fp, buff);
+  printf("Sekcja t32 procesu o PID: %d \n", getpid());
+  fprintf(fp, "Sekcja t32 procesu o PID: %d \n", getpid());
   fflush(fp);
   sleep(1);
 
   semafor_v(1);
   semafor_p(4);
 
-  sprintf(buff, "Sekcja t33 procesu o PID: %d \n", getpid());
-  printf(buff);
-  fprintf(fp, buff);
+  printf("Sekcja t33 procesu o PID: %d \n", getpid());
+  fprintf(fp, "Sekcja t33 procesu o PID: %d \n", getpid());
   fflush(fp);
   sleep(1);
 
