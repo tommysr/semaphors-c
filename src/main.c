@@ -17,14 +17,25 @@ int main(int argc, char *argv[])
   key_t key = 2115;
   int sem_count = 5;
   int status, child_pid;
+  char *parsed_sem_id = NULL;
 
-  char str[10];
   char path[] = "./";
-  char *programs[] = {"p1", "p2", "p3"};
+  char programs[][3] = {"p1", "p2", "p3"};
 
   int sem_id = sem_create(key, sem_count);
   sem_set_default(sem_id);
-  sprintf(str, "%d", sem_id);
+
+  int len = snprintf(NULL, 0, "%d", sem_id);
+  parsed_sem_id = malloc((len + 1) * sizeof(char));
+
+  int p_sem_id = snprintf(parsed_sem_id, len + 1, "%d", sem_id);
+  parsed_sem_id[len] = '\0';
+
+  if (p_sem_id == -1)
+  {
+    perror("parsing sem id failed");
+    exit(EXIT_FAILURE);
+  }
 
   for (int i = 0; i < 3; i++)
   {
@@ -35,7 +46,7 @@ int main(int argc, char *argv[])
       exit(EXIT_FAILURE);
       break;
     case 0:
-      child_pid = execl(strcat(path, programs[i]), programs[i], str, NULL);
+      child_pid = execl(strcat(path, programs[i]), programs[i], parsed_sem_id, (char *)NULL);
 
       if (child_pid == -1)
       {
@@ -61,6 +72,8 @@ int main(int argc, char *argv[])
     printf("Proces o PID: %d zakonczony z statusem %d\n", child_pid, status);
   }
 
+  free(parsed_sem_id);
+  parsed_sem_id = NULL;
   sem_remove(sem_id);
 
   return 0;

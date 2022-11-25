@@ -14,7 +14,7 @@ static void semafor_v(int);
 int main(int argc, char *argv[])
 {
   FILE *fp = NULL;
-  fp = fopen("wynik.txt", "w");
+  fp = fopen("wynik.txt", "a");
 
   if (fp == NULL)
   {
@@ -22,7 +22,13 @@ int main(int argc, char *argv[])
     exit(EXIT_FAILURE);
   }
 
-  sem_id = atoi(argv[1]);
+  int parse_res = sscanf(argv[1], "%i", &sem_id);
+
+  if (parse_res == -1)
+  {
+    perror("parse int failed");
+    exit(EXIT_FAILURE);
+  }
 
   semafor_p(2);
 
@@ -62,10 +68,6 @@ static void semafor_p(int i)
       exit(EXIT_FAILURE);
     }
   }
-  else
-  {
-    printf("Semafor zostal zamkniety.\n");
-  }
 }
 
 static void semafor_v(int i)
@@ -79,9 +81,5 @@ static void semafor_v(int i)
   {
     perror("Nie moglem otworzyc semafora.\n");
     exit(EXIT_FAILURE);
-  }
-  else
-  {
-    printf("Semafor zostal otwarty.\n");
   }
 }

@@ -13,7 +13,7 @@ static void semafor_v(int);
 int main(int argc, char *argv[])
 {
   FILE *fp = NULL;
-  fp = fopen("wynik.txt", "w");
+  fp = fopen("wynik.txt", "a");
 
   if (fp == NULL)
   {
@@ -21,34 +21,38 @@ int main(int argc, char *argv[])
     exit(EXIT_FAILURE);
   }
 
-  sem_id = atoi(argv[1]);
+  int parse_res = sscanf(argv[1], "%i", &sem_id);
 
-  printf("Sekcja t21 procesu o PID: %d \n", getpid());
-  fprintf(fp, "Sekcja t21 procesu o PID: %d \n", getpid());
+  if (parse_res == -1)
+  {
+    perror("parse int failed");
+    exit(EXIT_FAILURE);
+  }
+
+  semafor_p(0);
+
+  printf("Sekcja t31 procesu o PID: %d \n", getpid());
+  fprintf(fp, "Sekcja t31 procesu o PID: %d \n", getpid());
   fflush(fp);
   sleep(1);
 
-  semafor_v(0);
-  semafor_p(1);
-
-  printf("Sekcja t22 procesu o PID: %d \n", getpid());
-  fprintf(fp, "Sekcja t22 procesu o PID: %d \n", getpid());
+  printf("Sekcja t32 procesu o PID: %d \n", getpid());
+  fprintf(fp, "Sekcja t32 procesu o PID: %d \n", getpid());
   fflush(fp);
   sleep(1);
 
-  semafor_v(2);
-  semafor_p(3);
+  semafor_v(1);
+  semafor_p(4);
 
-  printf("Sekcja t23 procesu o PID: %d \n", getpid());
-  fprintf(fp, "Sekcja t23 procesu o PID: %d \n", getpid());
+  printf("Sekcja t33 procesu o PID: %d \n", getpid());
+  fprintf(fp, "Sekcja t33 procesu o PID: %d \n", getpid());
   fflush(fp);
   sleep(1);
-
-  semafor_v(4);
 
   fclose(fp);
   return 0;
 }
+
 static void semafor_p(int i)
 {
   struct sembuf bufor_sem;
@@ -69,10 +73,6 @@ static void semafor_p(int i)
       exit(EXIT_FAILURE);
     }
   }
-  else
-  {
-    printf("Semafor zostal zamkniety.\n");
-  }
 }
 
 static void semafor_v(int i)
@@ -86,9 +86,5 @@ static void semafor_v(int i)
   {
     perror("Nie moglem otworzyc semafora.\n");
     exit(EXIT_FAILURE);
-  }
-  else
-  {
-    printf("Semafor zostal otwarty.\n");
   }
 }
